@@ -1,0 +1,525 @@
+#:kivy 1.9.0
+
+# Чекбокс со своим фоном
+<OvosCheckBox@CheckBox>
+    background_radio_normal: 'atlas://images/ovosatlas/checkbox_radio_off'
+    background_radio_down: 'atlas://images/ovosatlas/checkbox_radio_on'
+    background_checkbox_normal: 'atlas://images/ovosatlas/checkbox_off'
+    background_checkbox_down: 'atlas://images/ovosatlas/checkbox_on'
+    background_checkbox_disabled_down: 'atlas://images/ovosatlas/checkbox_disabled_on'
+    background_checkbox_disabled_normal: 'atlas://images/ovosatlas/checkbox_disabled_off'
+    background_radio_disabled_down: 'atlas://images/ovosatlas/checkbox_radio_disabled_on'
+    background_radio_disabled_normal: 'atlas://images/ovosatlas/checkbox_radio_disabled_off'
+
+# Свой label
+<OvosLabel@Label>
+    markup: True
+    font_size: '18sp'
+    color: 0.294,0.294,0.294,1
+
+# ФИ
+<FiBoxLayout@OvosBoxLayout>:
+    OvosLabel:
+        text: 'φ'
+        size_hint: .8, None
+
+# Гамма
+<GammaBoxLayout@OvosBoxLayout>:
+    OvosLabel:
+        text: 'γ (Гамма)'
+        size_hint: .8, None
+
+# n
+<NBoxLayout@OvosBoxLayout>:
+    OvosLabel:
+        text: 'n'
+        size_hint: .8, None
+
+# Свой BoxLayout
+<OvosBoxLayout@BoxLayout>
+    size_hint_y: None
+
+# Свой серый BoxLayout
+<TitleBoxLayout@OvosBoxLayout>
+    canvas:
+        Color:
+            rgba: 0.39215, 0.87451, 0.0902, 0.3
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+# Кнопка - картинка
+<ImageButton>
+    on_press:
+        self.change_color()
+	canvas.before:
+        Color:
+            rgba: 0.039, 0.341, 0.6078, 1
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+##########################################
+<OvosWaterSet>:
+    # Настройки
+	ovosinput: root.manager.ovosinput
+    ckst: _Ckst
+    task1: _task1
+    task2: _task2
+    task3: _task3
+    task4: _task4
+    find_n: _task1_find_n
+    task2_Cdop: _task2_Cdop
+    task2_Z: _task2_Z
+    task2_M: _task2_M
+    task3_Z: _task3_Z
+    task4_Z: _task4_Z
+    t: _t
+    cdop: _Cdop
+    fi: _fi
+    n: _n
+    gamma: _gamma
+    mc: _MC
+
+	ScrollView:
+
+		GridLayout:
+
+			orientation: "vertical"
+			cols: 1
+			size_hint_y: None
+			height: self.minimum_height
+
+            OvosBoxLayout:
+				Label:
+					text: '[color=3F51B5]Известны значения:[/color]'
+					color: 0,0,0,1
+                    markup: True
+
+            FiBoxLayout:
+
+                OvosCheckBox:
+                    id: _fi
+                    size_hint: .2, None
+                    disabled: False if not _gamma.active and not _n.active else True
+                    active: False if _gamma.active and _n.active else False
+
+            GammaBoxLayout:
+
+                OvosCheckBox:
+                    id: _gamma
+                    size_hint: .2, None
+                    #disabled: False if _task1.active else True
+                    #active: False if _task1.active else False
+
+            NBoxLayout:
+
+                OvosCheckBox:
+                    id: _n
+                    size_hint: .2, None
+                    disabled: False if not _task1_find_n.active and not _gamma.active else True
+                    active: False if _task1_find_n.active and _gamma.active else False
+
+            OvosBoxLayout:
+
+                OvosLabel:
+					text: 'MC'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _MC
+                    size_hint: .2, None
+                    # active: True if _Ckst.active else False
+                    disabled: False if not _gamma.active and not _n.active else True
+                    active: False if _gamma.active and _n.active else False
+
+            # БЛОК-1 'Расчет разбавления для проточных водоемов'
+            TitleBoxLayout:
+
+				Label:
+					text: '* Расчет разбавления для проточных водоемов'
+					color: 0,0,0,1
+                    size_hint: .8, None
+                    halign: 'right'
+					font_size: '13sp'
+                    text_size: self.width, None
+                OvosCheckBox:
+                    id: _task1
+                    size_hint: .2, None
+                    group: 'task'
+                    allow_no_selection: False
+                    active: True
+
+            OvosBoxLayout:
+				Label:
+					text: '[color=3F51B5]Найти:[/color]'
+					color: 0,0,0,1
+                    markup: True
+
+            OvosBoxLayout:
+                OvosLabel:
+					text: 'C[sub]к.ст[/sub]'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _Ckst
+                    size_hint: .2, None
+                    disabled: True if _task1.active else True
+                    active: True if _task1.active else False
+
+            OvosBoxLayout:
+                OvosLabel:
+					text: 'n'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _task1_find_n
+                    size_hint: .2, None
+                    disabled: False if _task1.active else True
+                    active: False if _task1.active else False
+
+
+
+
+
+            # BLOCK-2
+
+            TitleBoxLayout:
+
+				Label:
+					text: '* Расчет ПДС для проточных водоемов, Допустимой концентрации загрязнений в сточных водах'
+					color: 0,0,0,1
+                    size_hint: .8, None
+                    halign: 'right'
+                    text_size: self.width, None
+					font_size: '13sp'
+                OvosCheckBox:
+                    id: _task2
+                    allow_no_selection: False
+                    size_hint: .2, None
+                    group: 'task'
+                    allow_no_selection: False
+
+            OvosBoxLayout:
+
+				Label:
+					text: '[color=3F51B5]Найти:[/color]'
+					color: 0,0,0,1
+                    markup: True
+
+            OvosBoxLayout:
+                OvosLabel:
+                    text: 'ПДС'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _pds
+                    size_hint: .2, None
+                    disabled: True if _task2.active else True
+                    active: True if _task2.active else False
+
+            OvosBoxLayout:
+
+                OvosLabel:
+					text: 'C[sub]доп[/sub]'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _Cdop
+                    size_hint: .2, None
+                    disabled: False if _task2.active and not _task2_Cdop.active else True
+                    active: True if _task2.active and not _task2_Cdop.active else False
+
+            OvosBoxLayout:
+                OvosLabel:
+                    text: 'M - (фактический сброс)'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _task2_M
+                    size_hint: .2, None
+                    disabled: False if _task2.active else True
+                    active: False if _task2.active else False
+
+
+            OvosBoxLayout:
+                OvosLabel:
+					text: 'Z'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _task2_Z
+                    size_hint: .2, None
+                    disabled: False if _task2.active else True
+                    active: False if _task2.active else False
+
+            OvosBoxLayout:
+				Label:
+					text: '[color=3F51B5]Известны значения:[/color]'
+					color: 0,0,0,1
+                    markup: True
+
+
+            OvosBoxLayout:
+
+                OvosLabel:
+					text: 'C[sub]доп[/sub]'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _task2_Cdop
+                    size_hint: .2, None
+                    # active: True if _Ckst.active else False
+                    disabled: False if _task2.active and not _Cdop.active else True
+                    active: False if _task2.active  and _Cdop.active else False
+
+
+            # BLOCK-3
+
+            TitleBoxLayout:
+
+				Label:
+					text: '* Расчет допустимой концентрации взвешенных веществ в сточной воде перед сбросом в водоем'
+					color: 0,0,0,1
+                    size_hint: .8, None
+                    halign: 'right'
+                    text_size: self.width, None
+					font_size: '13sp'
+                OvosCheckBox:
+                    id: _task3
+                    size_hint: .2, None
+                    allow_no_selection: False
+                    group: 'task'
+
+            OvosBoxLayout:
+
+                Label:
+                    text: '[color=3F51B5]Найти:[/color]'
+                    color: 0,0,0,1
+                    markup: True
+
+            OvosBoxLayout:
+                OvosLabel:
+                    text: 'C[sub] в.доп[/sub]'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _Cvdop
+                    size_hint: .2, None
+                    disabled: True if _task3.active else True
+                    active: True if _task3.active else False
+
+            OvosBoxLayout:
+
+                OvosLabel:
+                    text: 'Z'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _task3_Z
+                    size_hint: .2, None
+                    disabled: False if _task3.active else True
+                    active: False if _task3.active else False
+
+            # BLOCK-4
+
+            TitleBoxLayout:
+
+				Label:
+					text: '* Расчет допустимого значения БПК[sub]полн[/sub] в сточной воде перед сбросом в водоем'
+					color: 0,0,0,1
+                    size_hint: .8, None
+                    text_size: self.width, None
+                    halign: 'right'
+					markup: True
+					font_size: '13sp'
+                OvosCheckBox:
+                    id: _task4
+                    size_hint: .2, None
+                    group: 'task'
+                    allow_no_selection: False
+
+            OvosBoxLayout:
+
+                Label:
+                    text: '[color=3F51B5]Найти:[/color]'
+                    color: 0,0,0,1
+                    markup: True
+
+            OvosBoxLayout:
+                OvosLabel:
+                    text: 'БПК[sub] доп[/sub]'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _bpk_dop
+                    size_hint: .2, None
+                    disabled: True if _task4.active else True
+                    active: True if _task4.active else False
+
+            OvosBoxLayout:
+
+                OvosLabel:
+                    text: 'Z'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _task4_Z
+                    size_hint: .2, None
+                    disabled: False if _task4.active else True
+                    active: False if _task4.active else False
+
+            OvosBoxLayout:
+                Label:
+                    text: '[color=3F51B5]Известны значения:[/color]'
+                    color: 0,0,0,1
+                    markup: True
+
+            OvosBoxLayout:
+
+                OvosLabel:
+                    text: 't'
+                    size_hint: .8, None
+                OvosCheckBox:
+                    id: _t
+                    size_hint: .2, None
+                    # active: True if _Ckst.active else False
+                    disabled: False if _task4.active else True
+                    active: False if _task4.active else False
+
+
+			AnchorLayout:
+				size_hint_y: None
+				Button:
+                    size_hint: .5, .6
+                    pos_hint: {'center_x':.5, 'center_y': .5}
+					text: 'Применить'
+					background_color: 0.878, 0.878, 0.878, 1
+
+					on_release:
+						root.apply()
+						root.manager.current = '_ovosinput'
+
+
+##########################################
+
+<OvosWaterInput>:
+	# Входные Данные
+	layout: _layout
+    ovosset: root.manager.ovosset
+
+	ScrollView:
+
+		GridLayout:
+
+			orientation: "vertical"
+			cols: 1
+			size_hint_y: None
+			height: self.minimum_height
+
+			GridLayout:
+				cols:2
+				padding: 5, 5
+				size_hint_y: None
+				height: self.minimum_height
+				id: _layout
+				#############
+				#############
+
+
+			AnchorLayout:
+
+				size_hint_y: None
+                padding: 10, 0
+				Button:
+					text: 'Решение'
+                    size_hint: .5, .6
+                    pos_hint: {'center_x':.5, 'center_y': .5}
+					background_color: 0.16, 0.5, 0.725, 0.8
+					on_release:
+						root.calculate()
+
+
+##########################################
+
+<MainClass>:
+
+	# Главный класс-объект
+	id: _main_class
+	screen_manager: _screen_manager
+
+	canvas.before:
+
+		# серый фон
+        Color:
+            rgba: 0.8117, 0.8470, 0.8627, 1
+
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+	FloatLayout:
+
+		orientation: "vertical"
+        width: root.width
+		height: root.height
+
+		AnchorLayout:
+			# 3 кнопки наверху
+			anchor_x: 'center'
+			anchor_y: 'top'
+
+
+			BoxLayout:
+				orientation: 'horizontal'
+				size_hint: 1, .1
+
+				ImageButton:
+					source: 'atlas://images/ovosatlas/set'
+                    on_press:
+                        self.source="atlas://images/ovosatlas/set_down"
+                    on_release:
+                        _screen_manager.current = '_ovosset'
+                        self.source='atlas://images/ovosatlas/set'
+                        self.change_color(clear=True)
+				ImageButton:
+					source: 'atlas://images/ovosatlas/input'
+                    on_press:
+                        self.source="atlas://images/ovosatlas/input_down"
+                    on_release:
+                        _screen_manager.current = '_ovosinput'
+                        self.source='atlas://images/ovosatlas/input'
+                        self.change_color(clear=True)
+				ImageButton:
+					source: 'atlas://images/ovosatlas/result'
+                    on_press:
+                        self.source="atlas://images/ovosatlas/result_down"
+					on_release:
+                        self.source='atlas://images/ovosatlas/result'
+                        _screen_manager.current = '_result'
+                        self.change_color(clear=True)
+
+
+        ScreenManager:
+            id: _screen_manager
+            name: "screen_manager"
+			size_hint: 1, .9
+			ovosinput: _ovosinput
+			ovosset: _ovosset
+			result: _result
+			OvosWaterSet:
+				id: _ovosset
+				name: "_ovosset"
+			OvosWaterInput:
+				id: _ovosinput
+				name: "_ovosinput"
+			Screen:
+				# ????? ??????
+				name: "_result"
+
+				ScrollView:
+					Label:
+						id: _result
+						text: "Программа для решения задач по дисциплине ОВОС (Нормирование качества воды в водоемах)\nВычисление ПДС, Кратность Разбавления, Степень очистки, БПК\n[b]Автор[/b]: Азат Маннанов (БОС-12-31)\n© апрель 2016"
+						color: 0,0,0,1
+						halign: 'justify'
+						valign: 'middle'
+						size_hint_y: None
+                        font_size: '16sp'
+						text_size: self.width, None
+						height: self.texture_size[1]
+						markup: True
+
+##########################################
