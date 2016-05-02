@@ -189,7 +189,7 @@ class OvosWaterApp(App):
         return True
 
     def on_resume(self):
-        passs
+        pass
 
 
 if __name__ == '__main__':
