@@ -13,7 +13,7 @@ def pds(q, Cdop):
         """
 
     result = q * Cdop
-    text = "ПДС = q · C[sub]доп[/sub] = {} · {:.5g} = {:.5g} г/ч".format(q, Cdop, result)
+    text = "ПДС = q · C[sub]доп[/sub] = {} · {:.5g} = {:.5g} г/с".format(q, Cdop, result)
     return (result, text)
 
 
